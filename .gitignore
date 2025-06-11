@@ -36,3 +36,6 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+### antlr4 ###
+/src/main/java/antlr4

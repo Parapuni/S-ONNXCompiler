@@ -32,11 +32,15 @@
                         <goals>
                             <goal>antlr4</goal>
                         </goals>
+                        <phase>generate-sources</phase>
                     </execution>
                 </executions>
                 <configuration>
                     <sourceDirectory>src/main/java</sourceDirectory>
-                    <outputDirectory>src/main/java</outputDirectory>
+                    <outputDirectory>src/main/java/antlr4</outputDirectory>
+                    <listener>true</listener>
+                    <visitor>true</visitor>
+                    <treatWarningsAsErrors>true</treatWarningsAsErrors>
                 </configuration>
             </plugin>
         </plugins>
