@@ -5,8 +5,7 @@ model
     ;
 
 model_body_def
-    : ir_version_def producer_name_def producer_version_def
-    domain_def model_version_def doc_string_def graph_def opset_import_def
+    : ir_version_def producer_name_def producer_version_def domain_def model_version_def doc_string_def graph_def opset_import_def
     ;
 
 ir_version_def
@@ -14,7 +13,7 @@ ir_version_def
     ;
 
 producer_name_def
-    : PRODUCER_NAME '= ' IntegerLiteral
+    : PRODUCER_NAME '=' StringLiteral
     ;
 
 producer_version_def
@@ -234,7 +233,7 @@ fragment IntegerNumeral: '0' | [1-9][0-9]* ;
 
 
 // string规则
-StringLiteral: '"'(EscapeSequence | (~'\\' | ~'"'))*'"';
+StringLiteral: '"'(EscapeSequence | ~[\\"])*'"';
 fragment EscapeSequence: '\\' ('b' | 't' | 'n' | 'f' | 'r' | '"' | '\'' | '\\');
 
 // bytes规则
@@ -255,6 +254,6 @@ ASSIGN: '=';
 DIM_PARAM: 'dim_param';
 
 // 空白符
-WS: [\t\r\n]+ -> skip;
-COMMENT: '/*' .*? '*/' -> skip;
-LINE_COMMENT: '//' ~[\r\n]* -> skip;
+WS: [ \t\r\n\u000C\u3000]+ -> channel(HIDDEN);
+COMMENT: '/*' .*? '*/' -> channel(HIDDEN);
+LINE_COMMENT: '//' ~[\r\n]* -> channel(HIDDEN);
