@@ -1,0 +1,82 @@
+<ast>
+    <templates>
+        <ast_node_template name="list" T="var">
+            <parent name="var_list">
+                <child index="0">var</child>
+                <child index="1" optional="true">var_list</child>
+            </parent>
+        </ast_node_template>
+        <ast_node_template name="arr" T="var">
+            <parent name="var_arr">
+                <child index="0" optional="true">id_list</child>
+            </parent>
+        </ast_node_template>
+    </templates>
+
+    <ast_nodes>
+        <ast_node>
+            <parent name="graph">
+                <child index="0">node_list</child>
+                <child index="1">input_list</child>
+                <child index="2">output_list</child>
+                <child index="3">initializer_list</child>
+            </parent>
+        </ast_node>
+
+
+        <ast_node>
+            <parent name="node">
+                <child index="0" abstract="true">input</child>
+                <child index="1" abstract="true">output</child>
+                <child index="2">attribute_list</child>
+            </parent>
+        </ast_node>
+
+
+        <ast_node>
+            <parent name="id_list">
+                <child index="0" optional="true">id_list</child>
+            </parent>
+        </ast_node>
+
+
+        <ast_node>
+            <parent name="input_list" extd="input" impl="list">
+            </parent>
+        </ast_node>
+
+        <ast_node>
+            <parent name="input_arr" extd="input" impl="arr">
+            </parent>
+        </ast_node>
+
+        <ast_node>
+            <parent name="output_list" extd="output" impl="list">
+            </parent>
+        </ast_node>
+
+        <ast_node>
+            <parent name="output_arr" extd="output" impl="arr">
+            </parent>
+        </ast_node>
+
+        <ast_node>
+            <parent name="attribute_list" impl="list">
+            </parent>
+        </ast_node>
+
+        <ast_node>
+            <parent name="attribute">
+            </parent>
+        </ast_node>
+
+        <ast_node>
+            <parent name="value_info">
+<!--                TODO-->
+            </parent>
+        </ast_node>
+
+    </ast_nodes>
+</ast>
+
+

@@ -1,0 +1,8 @@
+T1 = input("X", int, [3, 2])
+T2 = input("pads", int, [1, 4])
+T3 = input("value", int, [1])
+output("Y", T4)
+
+T4 = Pad(T1, T2, mode=0)
+
+W1 = Weight("conv.bias", int, [1,2,3,4], raw_data=0000000000b)

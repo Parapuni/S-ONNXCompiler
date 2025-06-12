@@ -1,5 +1,9 @@
 grammar SONNX;
 
+options{
+    caseInsensitive = true;
+}
+
 model
     : MODELPROTO '{' model_body_def '}'
     ;
@@ -43,11 +47,8 @@ graph_body_def
 name_def
     : NAME '=' StringLiteral
     ;
-/*
-TODO 考虑node_repeats的位置
-*/
 node_list
-    : NODE '{' node_def node_repeats'}'
+    : NODE '{' node_def '}' node_repeats
     ;
 
 node_repeats
@@ -133,7 +134,7 @@ tensor_type_def
     ;
 
 elem_type_def
-    : ELEM_TYPE '=' INT | FLOAT | STRING | BOOL
+    : ELEM_TYPE '=' (INT | FLOAT | STRING | BOOL)
     ;
 
 shape_def
@@ -158,7 +159,7 @@ tensor_def
     ;
 
 data_type_def
-    : DATA_TYPE '=' INT | FLOAT | STRING | BOOL
+    : DATA_TYPE '=' (INT | FLOAT | STRING | BOOL)
     ;
 
 dims_def
@@ -237,7 +238,7 @@ StringLiteral: '"'(EscapeSequence | ~[\\"])*'"';
 fragment EscapeSequence: '\\' ('b' | 't' | 'n' | 'f' | 'r' | '"' | '\'' | '\\');
 
 // bytes规则
-BytesLiteral: [0-9A-Fa-f]+ BytesSuffix;
+BytesLiteral: [0-9a-f]+ BytesSuffix;
 fragment BytesSuffix: 'b';
 
 // 分隔符
