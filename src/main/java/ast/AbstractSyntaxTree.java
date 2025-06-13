@@ -19,6 +19,10 @@ public class AbstractSyntaxTree {
         return true;
     }
 
+    public int getChildCount(){
+        return this.children.size();
+    }
+
     public AbstractSyntaxTree getChild(int i){
         if(i<this.children.size()){
             return this.children.get(i);

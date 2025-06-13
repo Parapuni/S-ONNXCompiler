@@ -9,4 +9,12 @@ public class WeightASTNode extends NamedASTNode {
         this.dataType = dataType;
         this.raw_data = raw_data;
     }
+
+    public ValueASTNode dims(){
+        ValueASTNode dimsNode = null;
+        if (children.size() > 0 && children.get(0) instanceof ValueASTNode) {
+            dimsNode = (ValueASTNode) children.get(0);
+        }
+        return dimsNode;
+    }
 }

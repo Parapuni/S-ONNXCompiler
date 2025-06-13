@@ -1,0 +1,4 @@
+W1=Initializer("initializer1",float,[2, 1],01020304b)
+T1=Input("input1",float,[1, 2])
+T2=MatMul(T1,W1)
+Output("output1",T2)

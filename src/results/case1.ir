@@ -1,0 +1,6 @@
+W1=Initializer("conv.bias",int,[1, 2, 3, 4],000000000000b)
+T1=Input("X",int,[3, 2])
+T2=Input("pads",int,[1, 4])
+T3=Input("value",int,[1])
+T4=Pad(T1,T2,T3,mode=33)
+Output("Y",T4)

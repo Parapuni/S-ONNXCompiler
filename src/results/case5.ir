@@ -1,0 +1,3 @@
+T1=Input("input1",float,[1])
+T2=CustomOp(T1,customAttr=SomeStringValue)
+Output("output1",T2)

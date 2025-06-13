@@ -20,6 +20,10 @@ public class ValueASTNode extends AbstractSyntaxTree {
         this.value.add(value);
     }
 
+    public String getValue() {
+        return  this.value.toString();
+    }
+
     @Override
     public void toStringTree(){
         System.out.print(this.valueKind+value.toString());

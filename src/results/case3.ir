@@ -1,0 +1,5 @@
+T1=Input("input1",float,[1])
+T2=Input("input2",float,[1])
+T3=Input("input3",float,[1])
+T4=Mul(T1,T2,T3)
+Output("output1",T4)
