@@ -64,17 +64,28 @@ public class ASTGenerator extends SONNXBaseVisitor<AbstractSyntaxTree> {
     public AbstractSyntaxTree visitNode_def(SONNXParser.Node_defContext ctx){
         NodeASTNode node = new NodeASTNode(ctx.op_type_def().StringLiteral().getText(),
                 ctx.name_def().StringLiteral().getText());
+        /*
+
+        FIXME
+        符号表管理
+
+
+         */
         Symbol symbol = new Symbol(node.name,node.opType, "node",
                 "line "+ctx.name_def().getStart().getLine() + ":" + ctx.getText());
         try {
             symbols.addSymbol(symbol, "node");
         } catch (NameConflictException e) {
-            /*
-            TODO : 异常处理
-             */
-            System.err.println(e.getMessage());
+            System.err.println(this.symbols.scope+": "+e.getMessage());
             System.exit(1);
         }
+
+        /*
+        继续遍历AST
+         */
+
+
+
         if(ctx.input_list()!=null){
             node.addChild(visitInput_list(ctx.input_list()));
         }else {
@@ -126,12 +137,25 @@ public class ASTGenerator extends SONNXBaseVisitor<AbstractSyntaxTree> {
     public AbstractSyntaxTree visitInput_arr(SONNXParser.Input_arrContext ctx) {
         ValueASTNode inputValues = new ValueASTNode(ValueASTNode.ValueKind.ID);
         inputValues.addValue(ctx.StringLiteral().getText());
+
+        /*
+        FIXME
+         */
         quetoLocator.addLocation(ctx.StringLiteral().getText(), "input", "line "+ctx.StringLiteral().getSymbol().getLine() + ":" + ctx.getText());
+
+
+
+
         SONNXParser.Id_repeatsContext idCtx = ctx.id_repeats();
         while (!idCtx.getText().isEmpty()){
             inputValues.addValue(idCtx.StringLiteral().getText());
-            //todo 记录位置，方便错误处理
+            /*
+            FIXME
+             */
             quetoLocator.addLocation(idCtx.StringLiteral().getText(), "input", "line "+ctx.StringLiteral().getSymbol().getLine() + ":" + ctx.getText());
+
+
+
             idCtx = idCtx.id_repeats();
         }
         return inputValues;
@@ -141,19 +165,34 @@ public class ASTGenerator extends SONNXBaseVisitor<AbstractSyntaxTree> {
     public AbstractSyntaxTree visitOutput_arr(SONNXParser.Output_arrContext ctx) {
         ValueASTNode outputValues = new ValueASTNode(ValueASTNode.ValueKind.ID);
         outputValues.addValue(ctx.StringLiteral().getText());
+
+
+        /*
+        FIXME
+         */
         if(quetoLocator.contains(ctx.StringLiteral().getText(), "output")){
-            System.err.println("Error: Output tensor '" + ctx.StringLiteral().getText() + "' already exists in the output list of another node.");
+            System.err.println("Error in file"+this.symbols.scope+" at line "+ctx.getStart().getLine()+"Output tensor '" + ctx.StringLiteral().getText() + "' already exists in the output list of another node.");
             System.exit(1);
         }
         quetoLocator.addLocation(ctx.StringLiteral().getText(), "output", "line "+ctx.StringLiteral().getSymbol().getLine() + ":" + ctx.getText());
+
+
+
         SONNXParser.Id_repeatsContext idCtx = ctx.id_repeats();
         while (!idCtx.getText().isEmpty()){
             outputValues.addValue(idCtx.StringLiteral().getText());
+             /*
+            FIXME
+             */
             if(quetoLocator.contains(idCtx.StringLiteral().getText(), "output")){
-                System.err.println("Error: Output tensor '" + ctx.StringLiteral().getText() + "' already exists in the output list of another node.");
+                System.err.println("Error in file"+this.symbols.scope+" at line "+idCtx.getStart().getLine()+"Output tensor '" + ctx.StringLiteral().getText() + "' already exists in the output list of another node.");
                 System.exit(1);
             }
             quetoLocator.addLocation(idCtx.StringLiteral().getText(), "output", "line "+ctx.StringLiteral().getSymbol().getLine() + ":" + ctx.getText());
+
+
+
+
             idCtx = idCtx.id_repeats();
         }
         return outputValues;
@@ -194,16 +233,21 @@ type dims raw_data
         WeightASTNode weightTensorNode = new WeightASTNode(ctx.name_def().StringLiteral().getText(),
                 data_type, ctx.raw_data_def().BytesLiteral().getText());
         weightTensorNode.addChild(visitDims_def(ctx.dims_def()));
+
+         /*
+        FIXME
+         */
+
         Symbol symbol = new Symbol(weightTensorNode.name, data_type, "initializer", "line "+ctx.name_def().getStart().getLine() + ":" + ctx.getText());
         try {
             symbols.addSymbol(symbol, "initializer");
         } catch (NameConflictException e) {
-            /*
-            TODO : 异常处理
-             */
-            System.err.println(e.getMessage());
+            System.err.println(this.symbols.scope+": "+e.getMessage());
             System.exit(1);
         }
+
+
+
         return weightTensorNode;
     }
 
@@ -253,6 +297,12 @@ type dims raw_data
         }
         TensorASTNode tensorNode = new TensorASTNode(name, elemType);
         tensorNode.addChild(visitDim_list(ttdCtx.shape_def().dim_list()));
+
+
+
+        /*
+        FIXME
+         */
         String scope;
         if(ctx.getParent() instanceof SONNXParser.Input_listContext) {
             scope = "input";
@@ -266,15 +316,16 @@ type dims raw_data
             TODO : 异常处理
              */
         } catch (NameConflictException e) {
-            System.err.println(e.getMessage());
+            System.err.println(this.symbols.scope+": "+e.getMessage());
             System.exit(1);
         }
+
+
+
+
+
         return tensorNode;
     }
-
-    /*
-    dim_param考虑
-     */
 
     @Override
     public AbstractSyntaxTree visitDim_list(SONNXParser.Dim_listContext ctx) {

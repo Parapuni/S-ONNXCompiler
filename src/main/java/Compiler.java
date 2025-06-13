@@ -21,7 +21,7 @@ public class Compiler {
         errors in syntax tree
          */
         if (parser.getNumberOfSyntaxErrors() > 0) {
-            System.err.println("Syntax errors found in the source file.");
+            System.err.println("errors found in the source file:"+src);
             System.exit(1);
         }
         ASTGenerator generator = new ASTGenerator(tree, src);

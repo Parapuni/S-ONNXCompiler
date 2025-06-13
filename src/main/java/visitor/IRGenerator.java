@@ -103,10 +103,10 @@ public class IRGenerator {
             checkDefinition("output");
             checkType(inputs, outputs);
         }catch (UndefinedSymbolException e) {
-            System.err.println("Error: " + e.getMessage());
+            System.err.println(this.symbols.scope+": "+"error: " + e.getMessage());
             System.exit(1);
         }catch (TypeUnmatchedException e) {
-            System.err.println("Error: " + e.getMessage());
+            System.err.println(this.symbols.scope+": "+"error: " + e.getMessage());
             System.exit(1);
         }
         String op = node.opType.replace("\"","");
@@ -121,15 +121,17 @@ public class IRGenerator {
         /*
         TODO 处理多个output
          */
-        String temp = newTemp();
-        //setTempName
-        symbols.setTempName(outputs.get(0), "output", temp);
-        String tac;
-        if(attr != null)
-            tac = temp + "=" + op + "(" + String.join(",",temps) + "," + attr + ")\n";
-        else
-            tac = temp + "=" + op + "(" + String.join(",",temps) + ")\n";
-        bw.write(tac);
+        for (String output : outputs) {
+            String temp = newTemp();
+            //setTempName
+            symbols.setTempName(output, "output", temp);
+            String tac;
+            if(attr != null)
+                tac = temp + "=" + op + "(" + String.join(",",temps) + "," + attr + ")\n";
+            else
+                tac = temp + "=" + op + "(" + String.join(",",temps) + ")\n";
+            bw.write(tac);
+        }
     }
 
     public void visitInputList(ListASTNode node) throws IOException {
